@@ -10,6 +10,14 @@ const Statistics = ({ header, good, neutral, bad }) => {
   if(sum !== 0) {average = average / sum}
   const positive = sum === 0 ? '0%' : (good / sum * 100) + '%'
 
+  if(sum === 0) {
+    return (
+      <div>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
+  
   return (
     <div>
       <Header text={header}/>
