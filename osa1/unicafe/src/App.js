@@ -5,12 +5,20 @@ const Header = ({ text }) => <h1>{text}</h1>
 const Button = ({ handleClick, text }) => <button onClick={handleClick}>{text}</button> 
 
 const Statistics = ({ header, good, neutral, bad }) => {
+  const sum = good + bad + neutral
+  let average = good + (bad * -1)
+  if(sum !== 0) {average = average / sum}
+  const positive = sum === 0 ? '0%' : (good / sum * 100) + '%'
+
   return (
     <div>
       <Header text={header}/>
       <p>good {good}</p>
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
+      <p>all {sum}</p>
+      <p>average {average}</p>
+      <p>positive {positive}</p>
     </div>
  
   )
