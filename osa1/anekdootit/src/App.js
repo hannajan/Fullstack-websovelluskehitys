@@ -1,9 +1,22 @@
 import React, { useState } from 'react'
 
+const Header = ({ text }) => <h1>{text}</h1>
+
 const Button = ({ handleClick, text}) => {
   return <button onClick={handleClick}>{text}</button>
 }
 
+const Display = ({ anecdotes, points,  i }) => {
+  return (
+    <div>
+      {anecdotes[i]}
+      <br></br>
+      has {points[i]} votes
+      <br></br>
+    </div>
+  )
+}
+ 
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -28,15 +41,31 @@ const App = () => {
     newPoints[selected] += 1
     setPoints(newPoints)
   }
+
+  const mostVoted = () => {
+    let best = 0
+    for(let i = 1; i < points.length; i++) {
+      if(points[i] > points[best]) best = i
+    }
+    return best
+  }
  
   return (
     <div>
-      {anecdotes[selected]}
-      <br></br>
-      has {points[selected]} points
-      <br></br>
+      <Header text='Anecdote of the day'/>
+      <Display
+        anecdotes={anecdotes}
+        points={points}
+        i={selected}
+      />
       <Button handleClick={voteForAnecdote} text='vote'/>
       <Button handleClick={nextAnecdote} text='next anecdote'/>
+      <Header text='Anecdote with most votes'/>
+      <Display
+        anecdotes={anecdotes}
+        points={points}
+        i={mostVoted()}
+      />
     </div>
   )
 }
