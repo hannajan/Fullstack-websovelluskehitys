@@ -10,14 +10,22 @@ const App = () => {
     setNewName(event.target.value)
   }
 
+  const containsName = persons.find((person) => person.name === newName) ? true : false
+
   const addNewPerson = (event) => {
     event.preventDefault()
-    const personObject = {
-      name: newName
+    if(containsName) {
+      window.alert(`${newName} is already added to phonebook`)
+    } else {
+      const personObject = {
+        name: newName
+      }
+      setPersons(persons.concat(personObject))
+      setNewName('')
     }
-    setPersons(persons.concat(personObject))
-    setNewName('')
   }
+
+
 
   return (
     <div>
@@ -31,7 +39,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-        {persons.map((person) => <p key={person.name}>{person.name}</p>)}     
+        {persons.map((person) => <p key={person.name}>{person.name}</p>)}
     </div>
   )
 
