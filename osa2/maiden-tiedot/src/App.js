@@ -10,7 +10,6 @@ const Filter = ({ filter, handleChange }) => {
 }
 
 const Country = ({ country }) => {
-  console.log(country)
   return (
     <div>
       <h1>{country.name}</h1>
@@ -28,17 +27,26 @@ const Country = ({ country }) => {
   )
 }
 
-const Countries = ({ filter, countries}) => {
-  const toShow = countries.filter((country) => country.name.toLowerCase().includes(filter.toLowerCase()))
 
-  if (toShow.length == 1){
+
+const Countries = ({ filter, countries, setFilter}) => {
+  let toShow = countries.filter((country) => country.name.toLowerCase().includes(filter.toLowerCase()))
+
+  const handleClick = (event) => {
+    toShow = countries.find((country) => country.name === event.target.value)
+    setFilter(toShow.name)
+  }
+
+  if (toShow.length === 1){
     return (
       <Country country={toShow[0]} />
       )
   } else if(toShow.length < 11) {
     return (
       <div>
-        {toShow.map((country) => <p key={country.alpha3Code}>{country.name}</p>)}
+        {toShow.map((country) => 
+          <p key={country.alpha3Code}>{country.name}<button onClick={handleClick} value={country.name}>show</button></p>)
+        }
       </div>
     )
   } else {
@@ -63,7 +71,7 @@ const App = () => {
     <div>
       <Filter filter={filter} handleChange={handleFilterChange} />
       {countries.length ? 
-        <Countries filter={filter} countries={countries} />
+        <Countries filter={filter} countries={countries} setFilter={setFilter}/>
         : <p>not found</p>
       }
     </div>
