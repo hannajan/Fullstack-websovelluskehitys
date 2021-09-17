@@ -8,8 +8,8 @@ import personService from './services/persons'
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
-  const [ newName, setNewName ] = useState('Mikko Mallikas')
-  const [newNumber, setNewNumber] = useState('+358507878787')
+  const [ newName, setNewName ] = useState('')
+  const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [message, setMessage] = useState(null)
   const [messageType, setMessageType] = useState('')
