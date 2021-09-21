@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Another blog",
-    "author": "Muumimamma",
-    "url": "www.bloggg.blog",
-    "likes": 0
+    "title": "App in own module",
+    "author": "Me",
+    "url": "www.blog.blog",
+    "likes": 15
 }
