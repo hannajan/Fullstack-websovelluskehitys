@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Router test",
+    "title": "Model in module",
     "author": "Me",
     "url": "www.blog.blog",
-    "likes": 2
+    "likes": 7
 }
