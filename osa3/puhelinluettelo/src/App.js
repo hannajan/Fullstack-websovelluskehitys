@@ -11,8 +11,10 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-  const [message, setMessage] = useState(null)
-  const [messageType, setMessageType] = useState('')
+  const [message, setMessage] = useState({
+    text: null,
+    type: null
+  })
 
   useEffect(() => {
     personService
@@ -26,7 +28,10 @@ const App = () => {
   const handleNumberChange = (event) => setNewNumber(event.target.value)
   const handleFilterChange = (event) => setFilter(event.target.value)
 
-  const containsName = persons.find((person) => person.name === newName) ? true : false
+  const containsName = () => {
+    const person = persons.find(p => p.name === newName)
+    return person ? true : false
+  }
 
   const updateNumber = (person) => {
     const updatedPerson = {...person, number: newNumber}
@@ -34,22 +39,23 @@ const App = () => {
       .update(person.id, updatedPerson)
       .then(returnedPerson => {
         setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+        setNewName('')
+        setNewNumber('')
       })
-      .catch((error) => {
-        setMessageType('error')
-        setMessage(`${person.name} was already deleted from server`)
+      .catch(error => {
+        setMessage({text: error.message, type: 'error'})
         setTimeout(() => {
-          setMessage(null)
-          setMessageType('')
+          setMessage({text: null, type: null})
         }, 3000)
       })
   }
 
   const addNewPerson = (event) => {
     event.preventDefault()
-    if(containsName) {
+
+    if(containsName()) {
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-        const person = persons.find(person => person.name === newName)
+        const person = persons.find(p => p.name === newName)
         updateNumber(person)
       }
     } else {
@@ -64,30 +70,35 @@ const App = () => {
           setPersons(persons.concat(createdPerson))
           setNewName('')
           setNewNumber('')
-          setMessageType('confirm')
-          setMessage(`Added ${createdPerson.name}`)
+          setMessage({ text: `Added ${createdPerson.name}`, type: 'confirm' })
           setTimeout(() => {
-            setMessage(null)
-            setMessageType('')
+            setMessage({ text: null, type: null})
           }, 3000)
+      })
+      .catch(error => {
+        console.log(error.response.data.error)
+        setMessage({ text: error.response.data.error, type: 'error' })
+        setTimeout(() => {
+          setMessage({ text: null, type: null})
+        }, 5000)
+        
+
       })
     }
   }
 
   const deletePerson = (event) => {
-    const id = Number(event.target.value)
+    const id = event.target.value
     const personToDelete = persons.find(person => person.id === id)
     if(window.confirm(`Delete ${personToDelete.name}`)) {
       personService
         .remove(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id))
-          setMessageType('confirm')
-          setMessage(`${personToDelete.name} was deleted`)
+          setMessage({ text: `${personToDelete.name} was deleted`, type: 'confirm'})
 
           setTimeout(() => {
-            setMessage(null)
-            setMessageType('')
+            setMessage({ text: null, type: null})
           }, 3000)
         })
     }
@@ -96,7 +107,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} type={messageType} />
+      <Notification message={message.text} type={message.type} />
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
       <h2>add a new</h2>
       <PersonForm
