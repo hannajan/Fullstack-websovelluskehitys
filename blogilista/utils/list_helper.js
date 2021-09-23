@@ -37,9 +37,32 @@ const mostBlogs = (blogs) => {
     return _.size(authorWithMostBlogs) > 0 ? authorWithMostBlogs : undefined
 }
 
+const mostLikes = (blogs) => {
+    const groupByAuthor = _.groupBy(blogs, 'author')
+    let countByLikes = []
+    _.map(groupByAuthor, author => {
+        let likes = 0
+        author.forEach(v => likes += v.likes)
+        countByLikes = _.concat(countByLikes, { author: author[0].author, likes: likes})
+    })
+    let mostLikes = {}
+    _.reduce(countByLikes, (maxLikes, auth) => {
+        if(auth.likes > maxLikes) {
+            mostLikes = { 
+                author: auth.author,
+                likes: auth.likes
+            }
+            return auth.likes
+        }
+        return maxLikes
+    }, 0)
+    return _.size(mostLikes) > 0 ? mostLikes: undefined
+}
+
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
