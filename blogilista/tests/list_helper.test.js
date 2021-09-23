@@ -1,3 +1,4 @@
+const { result } = require('lodash')
 const listHelper = require('../utils/list_helper')
 const listWithOneBlog = [
     {
@@ -82,5 +83,47 @@ describe('total likes', () => {
     test('returns 0 likes for empty list', () => {
         const result = listHelper.totalLikes([])
         expect(result).toBe(0)
+    })
+})
+
+describe('favorite blog', () => {
+    test('returns same blog for list with only one blog', () => {
+        const result = listHelper.favoriteBlog(listWithOneBlog)
+        expect(result).toEqual(listWithOneBlog[0])
+    })
+
+    test('returns correct blog for list on multiple blogs', () => {
+        const result = listHelper.favoriteBlog(blogs)
+        const favoriteBlog =     {
+            _id: "5a422b3a1b54a676234d17f9",
+            title: "Canonical string reduction",
+            author: "Edsger W. Dijkstra",
+            url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+            likes: 12,
+            __v: 0
+          }
+        expect(result).toEqual(favoriteBlog)
+    })
+
+    test('returns undefined for empty list', () => {
+        const result = listHelper.favoriteBlog([])
+        expect(result).toBe(undefined)
+    })
+})
+
+describe('most blogs', () => {
+    test('returns correct author list with one blog', () => {
+        const result = listHelper.mostBlogs(listWithOneBlog)
+        expect(result).toBe('Edsger W. Dijkstra')
+    })
+
+    test('returns correct author for list with multiple blogs', () => {
+        const result = listHelper.mostBlogs(blogs)
+        expect(result).toBe('Robert C. Martin')
+    })
+    
+    test('returns undefined for empty list', () => {
+
+        expect(listHelper.mostBlogs([])).toBe(undefined)
     })
 })
