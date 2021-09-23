@@ -25,16 +25,16 @@ const favoriteBlog = (blogs) => {
 
 const mostBlogs = (blogs) => {
     const countBlogsForAuthor = _.countBy(blogs, 'author')
-    let authorWithMostBlogs = ''
+    let authorWithMostBlogs = {}
     _.reduce(countBlogsForAuthor, (max, numOfBlogs, author) => {
         if(numOfBlogs > max) {
-            authorWithMostBlogs = author
+            authorWithMostBlogs = { author: author, blogs: numOfBlogs }
             return numOfBlogs
         }
         return max
     }, 0)
 
-    return authorWithMostBlogs.length > 0 ? authorWithMostBlogs : undefined
+    return _.size(authorWithMostBlogs) > 0 ? authorWithMostBlogs : undefined
 }
 
 module.exports = {
