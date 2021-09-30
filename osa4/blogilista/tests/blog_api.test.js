@@ -66,6 +66,32 @@ test('if likes are not defined they are set to 0', async () => {
 
 })
 
+test('if blog title not define status code 400 returned', async () => {
+    newBlog = {
+        author: 'Mikki Hiirulainen',
+        url: 'https://reactpattens.com/',
+        likes: 6
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
+test('if blog url not define status code 400 returned', async () => {
+    newBlog = {
+        title: 'Url not defined',
+        author: 'Mikki Hiirulainen',
+        likes: 6
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
