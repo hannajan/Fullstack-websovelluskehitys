@@ -122,6 +122,22 @@ describe('when there are initially some blogs in db', () => {
             expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
         })
     })
+
+    describe('updating blog', () => {
+        test('likes can be updated', async () => {
+            const blogsAtStart = await helper.blogsInDb()
+            const blogToUpdate = blogsAtStart[0]
+
+            const updatedBlog = {...blogToUpdate, likes: 100}
+
+            const response = await api
+                .put(`/api/blogs/${blogToUpdate.id}`)
+                .send(updatedBlog)
+                .expect(200)
+
+            expect(response.body.likes).toBe(100)
+        })
+    })
 })
 
 

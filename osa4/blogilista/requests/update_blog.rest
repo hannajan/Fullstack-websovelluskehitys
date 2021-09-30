@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/6149fac4d7ca29ee47730b8e
+Content-Type: application/json
+
+{
+    "title": "Another blog",
+    "author": "Muumimamma",
+    "url": "www.bloggg.blog",
+    "likes": 1
+}
