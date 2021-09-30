@@ -34,7 +34,7 @@ test('a valid blog can be added', async () => {
         url: "https://reactpatterns.com/",
         likes: 6
     }
-    
+
     await api
         .post('/api/blogs')
         .send(newBlog)
@@ -46,6 +46,24 @@ test('a valid blog can be added', async () => {
 
     const titles = blogsAtEnd.map(blog => blog.title)
     expect(titles).toContain('Test Blog')
+})
+
+test('if likes are not defined they are set to 0', async () => {
+    const newBlog = {
+        title: 'Likes not defined',
+        author: 'Mikki Hiirulainen',
+        url: 'https://reactpatterns.com/'
+    }
+
+    const response = await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const createdBlog = response.body
+    expect(createdBlog.likes).toBe(0)
+
 })
 
 afterAll(() => {

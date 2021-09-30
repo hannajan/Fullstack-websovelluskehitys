@@ -2,8 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Model in module",
+    "title": "Likes not defined",
     "author": "Me",
-    "url": "www.blog.blog",
-    "likes": 7
+    "url": "www.blog.blog"
 }
