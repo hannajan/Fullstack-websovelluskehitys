@@ -1,9 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYxNTZmMmY5ZTM2OTc4MzExNjk3ZjJlYSIsImlhdCI6MTYzMzExNDMyNywiZXhwIjoxNjMzMTE3OTI3fQ.rEPm5TYRMGuWUlG5AFQgaf8rv_7cNcA3dcgAhDcsvFU
 
 {
-    "title": "Hello world",
-    "author": "Minna",
+    "title": "Tokens in use",
+    "author": "Mikko Mallikas",
     "url": "www.blog.blog",
-    "likes": 7
+    "likes": 2
 }
