@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYxNTZmMmY5ZTM2OTc4MzExNjk3ZjJlYSIsImlhdCI6MTYzMzExNDMyNywiZXhwIjoxNjMzMTE3OTI3fQ.rEPm5TYRMGuWUlG5AFQgaf8rv_7cNcA3dcgAhDcsvFU
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYxNTZmMmY5ZTM2OTc4MzExNjk3ZjJlYSIsImlhdCI6MTYzMzExNDg4MSwiZXhwIjoxNjMzMTE4NDgxfQ.AxvjrrCayVFA0T-0APHKokUO3eqTTq4S5e_mQsPl8ws
 
 {
-    "title": "Tokens in use",
+    "title": "TokenExtractor",
     "author": "Mikko Mallikas",
     "url": "www.blog.blog",
-    "likes": 2
+    "likes": 9
 }
