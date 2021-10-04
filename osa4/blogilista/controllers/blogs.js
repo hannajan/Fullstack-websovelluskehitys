@@ -42,12 +42,8 @@ blogsRouter.delete('/:id', async (request, response) => {
   const blog = await Blog.findById(request.params.id)
 
   if (blog.user._id.toString() === decodedToken.id) {
-    console.log('Operation starts')
-    console.log('initial blogs array: ', user.blogs)
     const updatedBlogsArray = user.blogs.filter(b => b._id.toString() !== blog._id.toString())
-    console.log('updated array: ', updatedBlogsArray)
     user.blogs = updatedBlogsArray
-    console.log('user: ', user)
     await user.save()
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
