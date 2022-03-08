@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
+  const [notification, setNotification] = useState(null)
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -40,8 +42,16 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setNotification('Logged in!')
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     } catch (e) {
       console.log(e)
+      setNotification('Wrong username or password!')
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     }
   }
 
@@ -49,6 +59,10 @@ const App = () => {
     event.preventDefault()
     window.localStorage.clear()
     setUser(null)
+    setNotification('Logged out!')
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
   }
 
   const addBlog = async (event) => {
@@ -68,8 +82,16 @@ const App = () => {
       setTitle('')
       setAuthor('')
       setUrl('')
+      setNotification(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     } catch (e) {
       console.log(e)
+      setNotification('Blog could not be added. Title, author and url are required!')
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     } 
 
   }
@@ -134,6 +156,7 @@ const App = () => {
   if (user === null) {
     return (
       <div>
+        <Notification text={notification}/>
         <h2>Login to application</h2>
           {loginForm()}
       </div>
@@ -142,6 +165,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification text={notification}/>
       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
       <h2>blogs</h2>
       {blogs.map(blog =>
