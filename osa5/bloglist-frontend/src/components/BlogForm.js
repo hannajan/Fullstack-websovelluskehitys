@@ -20,7 +20,6 @@ const BlogForm = ({ createBlog }) => {
         setUrl('')
     }
 
-
     return (
         <div>
             <h2>create new</h2>    

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({blog}) => {
+const Blog = ({ blog, handleLike }) => {
 
 
   const [showFullView, setShowFullView] = useState(false)
@@ -20,6 +20,7 @@ const Blog = ({blog}) => {
     setShowFullView(!showFullView)
   }
 
+
   return (
     <div style={blogStyle}>
       <div style={hideFullView}>
@@ -30,7 +31,7 @@ const Blog = ({blog}) => {
         {blog.title} {blog.author} <></>
         <button onClick={toggleView}>hide</button> <br/>
         {blog.url} <br/>
-        likes <></> {blog.likes} <button>like</button> <br/>
+        likes <></> {blog.likes} <button onClick={() => handleLike(blog)}>like</button> <br/>
         {blog.user.name}
       </div>
     </div>
