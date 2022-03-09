@@ -12,13 +12,13 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  
+
   const blogFormRef = useRef()
- 
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs.sort((a, b) => b.likes - a.likes ))
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const App = () => {
     }, 5000)
   }
 
-  const addBlog = async (newBlog) => { 
+  const addBlog = async (newBlog) => {
     try {
       blogFormRef.current.toggleVisibility()
       const returnedBlog = await blogService.create(newBlog)
@@ -83,12 +83,12 @@ const App = () => {
       setTimeout(() => {
         setNotification(null)
       }, 5000)
-    } 
+    }
   }
 
 
   const likeBlog = async (blog) => {
-    const updatedBlog = {...blog, likes: blog.likes + 1 }
+    const updatedBlog = { ...blog, likes: blog.likes + 1 }
 
     const returnedBlog = await blogService.update({ id: blog.id, updatedBlog })
     const updatedBlogsArray = await blogs.map(b => blog.id === b.id ? returnedBlog : b ).sort((a,b) => b.likes - a.likes)
@@ -120,10 +120,10 @@ const App = () => {
       <div>
         password
         <input
-        type="password"
-        value={password}
-        name="Password"
-        onChange={({ target }) => setPassword(target.value)}
+          type="password"
+          value={password}
+          name="Password"
+          onChange={({ target }) => setPassword(target.value)}
         />
       </div>
       <button type="submit">login</button>
@@ -135,7 +135,7 @@ const App = () => {
       <div>
         <Notification text={notification}/>
         <h2>Login to application</h2>
-          {loginForm()}
+        {loginForm()}
       </div>
     )
   }
@@ -146,16 +146,16 @@ const App = () => {
       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog 
-          key={blog.id} 
-          blog={blog} 
-          handleLike={likeBlog} 
+        <Blog
+          key={blog.id}
+          blog={blog}
+          handleLike={likeBlog}
           user={user}
           handleRemove={removeBlog}
         />
       )}
       <Togglable buttonLabel='create blog' ref={blogFormRef}>
-       <BlogForm createBlog={addBlog}/>
+        <BlogForm createBlog={addBlog}/>
       </Togglable>
 
     </div>
