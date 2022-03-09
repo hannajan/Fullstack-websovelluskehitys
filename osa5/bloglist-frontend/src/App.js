@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -13,6 +15,8 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+
+  const blogFormRef = useRef()
  
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -76,6 +80,7 @@ const App = () => {
     }
 
     try {
+      blogFormRef.current.toggleVisibility()
       const returnedBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(returnedBlog))
 
@@ -120,39 +125,6 @@ const App = () => {
     </form>
   )
 
-  const newBlogForm = () => (
-    <form onSubmit={addBlog}>
-      <div>
-        title:     
-          <input 
-          type="text"
-          value={title}
-          name="title"
-          onChange={({ target }) => setTitle(target.value)}
-          />
-      </div>
-      <div>
-        author:
-        <input 
-          type="text"
-          value={author}
-          name="author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
-      <div>
-        url:
-        <input
-          type="text"
-          value={url}
-          name="url"
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-      <button type="submit">create</button>
-    </form>
-  )
-
   if (user === null) {
     return (
       <div>
@@ -172,7 +144,18 @@ const App = () => {
         <Blog key={blog.id} blog={blog} />
       )}
       <h2>create new</h2>
-      {newBlogForm()}
+      <Togglable buttonLabel='create blog' ref={blogFormRef}>
+       <BlogForm
+          onSubmit={addBlog}
+          title={title}
+          handleTitleChange={({ target }) => setTitle(target.value)}
+          author={author}
+          handleAuthorChange={({ target }) => setAuthor(target.value)}
+          url={url}
+          handleUrlChange={({ target }) => setUrl(target.value)}
+        />
+      </Togglable>
+
     </div>
   )
 }
