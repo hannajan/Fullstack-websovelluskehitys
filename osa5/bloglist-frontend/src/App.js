@@ -91,11 +91,20 @@ const App = () => {
     const updatedBlog = {...blog, likes: blog.likes + 1 }
 
     const returnedBlog = await blogService.update({ id: blog.id, updatedBlog })
-    const updatedBlogsArray = blogs.map(b => blog.id === b.id ? returnedBlog : b )
-    setBlogs(updatedBlogsArray.sort((a,b) => b.likes - a.likes))
+    const updatedBlogsArray = await blogs.map(b => blog.id === b.id ? returnedBlog : b ).sort((a,b) => b.likes - a.likes)
+    console.log('ye', updatedBlogsArray)
+    setBlogs(updatedBlogsArray)
+  }
 
+  const removeBlog = async ({ id }) => {
+    try {
+      await blogService.remove(id)
+      setBlogs(blogs.filter(b => b.id !== id))
+    } catch (e) {
+      console.log(e)
+    }
 
-}
+  }
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
@@ -137,7 +146,13 @@ const App = () => {
       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleLike={likeBlog}/>
+        <Blog 
+        key={blog.id} 
+        blog={blog} 
+        handleLike={likeBlog} 
+        user={user}
+        handleRemove={removeBlog}
+        />
       )}
       <Togglable buttonLabel='create blog' ref={blogFormRef}>
        <BlogForm createBlog={addBlog}/>
