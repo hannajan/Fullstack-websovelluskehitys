@@ -6,7 +6,14 @@ describe('Blog app', function() {
       username: 'test',
       password: 'secret'
     }
+    const anotherUser = {
+      name: 'Another user',
+      username: 'another',
+      password: 'salainen'
+    }
+
     cy.request('POST', 'http://localhost:3003/api/users/', user)
+    cy.request('POST', 'http://localhost:3003/api/users/', anotherUser)
     cy.visit('http://localhost:3000')
   })
 
@@ -73,6 +80,29 @@ describe('Blog app', function() {
 
         cy.get('#like-button').click()
         cy.contains('likes 1')
+      })
+
+      it('a blog can be deleted by its creator', function() {
+        cy.contains('Cypress blog Test Author')
+          .find('button')
+          .click()
+
+        cy.contains('remove').click()
+        cy.get('html').should('not.contain', 'Cypress blog')
+      })
+
+      it('a blog cannot be removed by different user', function() {
+        cy.contains('logout').click()
+        cy.get('#username').type('another')
+        cy.get('#password').type('salainen')
+        cy.get('button').click()
+
+        cy.contains('Cypress blog Test Author')
+          .find('button')
+          .click()
+
+        cy.get('.fullBlogView').should('contain', 'Cypress blog')
+        cy.get('.fullBlogView').should('not.contain', 'remove')
       })
     })
   })
