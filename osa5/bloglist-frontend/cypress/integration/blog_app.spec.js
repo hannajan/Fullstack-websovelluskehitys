@@ -105,5 +105,61 @@ describe('Blog app', function() {
         cy.get('.fullBlogView').should('not.contain', 'remove')
       })
     })
+
+    describe('when some blogs exist', function() {
+      beforeEach(function() {
+        cy.contains('create blog').click()
+
+        cy.get('#title').type('Blog 1')
+        cy.get('#author').type('Author 1')
+        cy.get('#url').type('www.1.fi')
+        cy.get('#submit-button').click()
+
+        cy.contains('create blog').click()
+
+        cy.get('#title').type('Blog 2')
+        cy.get('#author').type('Author 2')
+        cy.get('#url').type('www.2.fi')
+        cy.get('#submit-button').click()
+
+        cy.contains('create blog').click()
+
+        cy.get('#title').type('Blog 3')
+        cy.get('#author').type('Author 3')
+        cy.get('#url').type('www.3.fi')
+        cy.get('#submit-button').click()
+      })
+
+      it('blogs are shown ordered by most liked', function() {
+        cy.contains('Blog 1 Author 1').find('button').click()
+        cy.contains('Blog 2 Author 2').find('button').click()
+        cy.contains('Blog 3 Author 3').find('button').click()
+
+        cy.get('.fullBlogView')
+          .contains('Blog 2')
+          .find('#like-button')
+          .click()
+          .then(() => {
+            cy.get('.fullBlogView')
+              .contains('Blog 3')
+              .find('#like-button')
+              .click()
+              .then(() => {
+                cy.get('.fullBlogView')
+                  .contains('Blog 3')
+                  .find('#like-button')
+                  .click()
+                  .then(() => {
+                    cy.wait(3000)
+                    cy.get('.fullBlogView').as('orderedArray')
+                      .then(() => {
+                        cy.get('@orderedArray').first().should('contain', 'Blog 3')
+                        cy.get('@orderedArray').last()
+                      })
+                  })
+              })
+          })
+      })
+    })
   })
 })
