@@ -37,7 +37,7 @@ const Blog = ({ blog, handleLike, user, handleRemove }) => {
         {blog.title} {blog.author} <></>
         <button onClick={toggleView}>hide</button> <br/>
         {blog.url} <br/>
-        likes <></> {blog.likes} <button onClick={() => handleLike(blog)}>like</button> <br/>
+        likes <></> {blog.likes} <button id='like-button' onClick={() => handleLike(blog)}>like</button> <br/>
         {blog.user.name}
         {blog.user.name === user.name ?
           <div>
