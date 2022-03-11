@@ -33,6 +33,27 @@ describe('Blog app', function() {
 
       cy.get('.notification').should('contain', 'Wrong username or password!')
       cy.get('.notification').should('have.css', 'color', 'rgb(128, 128, 128)')
+
+      cy.get('html').should('not.contain', 'Testuser logged in')
+    })
+  })
+
+  describe('when logged in', function() {
+    beforeEach(function() {
+      cy.get('#username').type('test')
+      cy.get('#password').type('secret')
+      cy.get('button').click()
+    })
+
+    it('a blog can be created', function() {
+      cy.contains('create blog').click()
+
+      cy.get('#title').type('My cypress test blog')
+      cy.get('#author').type('Test Author')
+      cy.get('#url').type('docs.cypress.io')
+      cy.get('#submit-button').click()
+
+      cy.get('html').should('contain', 'My cypress test blog')
     })
   })
 })
