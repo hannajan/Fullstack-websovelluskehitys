@@ -34,6 +34,11 @@
       "content": "This is a new anecdote",
       "votes": 0,
       "id": "3E83pSR"
+    },
+    {
+      "content": "Redux thunk in use",
+      "votes": 0,
+      "id": "6vD4nEr"
     }
   ]
 }
