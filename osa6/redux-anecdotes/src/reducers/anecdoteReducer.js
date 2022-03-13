@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdotes'
+
 const getId = () => (100000 * Math.random()).toFixed(0)
 
 const reducer = (state = [], action) => {
@@ -39,5 +41,12 @@ export const setAnecdotes = (anecdotes) => {
     data: { anecdotes }
   }
 } 
+
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch(setAnecdotes(anecdotes))
+  }
+}
 
 export default reducer
