@@ -1,9 +1,11 @@
+import { getSuggestedQuery } from '@testing-library/react'
 import { useState } from 'react'
 import {
   Routes,
   Route,
   Link,
   useMatch,
+  useNavigate
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -71,6 +73,8 @@ const CreateNew = (props) => {
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  const navigate = useNavigate()
+
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -80,6 +84,11 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    navigate('/')
+    props.setNotification(`a new anecdote ${content} created!`)
+    setTimeout(() => {
+      props.setNotification(null)
+    }, 5000)
   }
 
   return (
@@ -98,12 +107,33 @@ const CreateNew = (props) => {
           url for more info
           <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
         </div>
-        <button>create</button>
+        <button type='submit'>create</button>
       </form>
     </div>
   )
 
 }
+
+const Notification = ({ notification }) => {
+  const style = {
+    borderStyle: 'solid',
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: 'green',
+    margin: 3,
+    padding: 2,
+
+  }
+  if( notification ) {
+    return (
+      <div style={style}>
+        {notification}
+      </div>
+    )
+  }
+  return <></>
+}
+
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -123,7 +153,7 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState(null)
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
@@ -153,9 +183,10 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      <Notification notification={notification}/>
       <Routes>
         <Route path='/anecdotes/:id' element={<Anecdote anecdote={anecdote} />} />
-        <Route path='/create' element={<CreateNew addNew={addNew} />} />
+        <Route path='/create' element={<CreateNew addNew={addNew} setNotification={setNotification}/>} />
         <Route path='/about' element={<About />} />
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
       </Routes>
