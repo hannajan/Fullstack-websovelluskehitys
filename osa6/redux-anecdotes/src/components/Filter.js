@@ -1,14 +1,13 @@
 import { setFilter } from "../reducers/filterReducer"
-import { useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 
-const Filter = () => {
-  const dispatch = useDispatch()
+const Filter = (props) => {
 
     const handleChange = (event) => {
       event.preventDefault()
-      dispatch(setFilter(event.target.value))
+      props.setFilter(event.target.value)
     }
-    
+
     const style = {
       marginBottom: 10
     }
@@ -19,5 +18,12 @@ const Filter = () => {
       </div>
     )
   }
+
+  const mapDispatchToProps = {
+    setFilter,
+  }
   
-  export default Filter
+  export default connect(
+      null,
+      mapDispatchToProps
+    )(Filter)
