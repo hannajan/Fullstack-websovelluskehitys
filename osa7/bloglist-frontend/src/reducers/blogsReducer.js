@@ -6,6 +6,16 @@ const blogsReducer = (state = [], action) => {
     return action.data.blogs
   case 'APPEND_BLOGS':
     return state.concat(action.data.blog)
+  case 'LIKE_BLOG': {
+    const id = action.data.blog.id
+    const blogToLike = state.find(blog => blog.id === id)
+    const likedBlog = { ...blogToLike, likes: blogToLike.likes + 1 }
+    return state.map(blog => blog.id !== id ? blog : likedBlog).sort((a, b) => b.likes - a.likes)
+  }
+  case 'REMOVE_BLOG': {
+    const id = action.data.id
+    return state.filter(blog => blog.id !== id)
+  }
   default:
     return state
   }
@@ -25,11 +35,40 @@ export const appendBlogs = (blog) => {
   }
 }
 
+export const incrementBlogLikes = (blog) => {
+  return {
+    type: 'LIKE_BLOG',
+    data: { blog }
+  }
+}
+
+export const removeBlogFromArray = (id) => {
+  return {
+    type: 'REMOVE_BLOG',
+    data: { id }
+  }
+}
+
 export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogsService.getAll()
     blogs.sort((a, b) => b.likes - a.likes)
     dispatch(setBlogs(blogs))
+  }
+}
+
+export const likeBlog = (blog) => {
+  return async dispatch => {
+    const updatedBlog = { ...blog, likes: blog.likes + 1 }
+    const returnedBlog = await blogsService.update({ id: blog.id, updatedBlog })
+    dispatch(incrementBlogLikes(returnedBlog))
+  }
+}
+
+export const removeBlog = (id) => {
+  return async dispatch => {
+    await blogsService.remove(id)
+    dispatch(removeBlogFromArray(id))
   }
 }
 

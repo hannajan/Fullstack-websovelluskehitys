@@ -6,7 +6,7 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { showNotification } from './reducers/notificationReducer'
-import { appendBlogs, initializeBlogs, setBlogs } from './reducers/blogsReducer'
+import { appendBlogs, initializeBlogs, likeBlog, removeBlog } from './reducers/blogsReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
@@ -83,25 +83,6 @@ const App = () => {
     }
   }
 
-  const likeBlog = async (blog) => {
-    const updatedBlog = { ...blog, likes: blog.likes + 1 }
-
-    const returnedBlog = await blogService.update({ id: blog.id, updatedBlog })
-    const updatedBlogsArray = await blogs
-      .map((b) => (blog.id === b.id ? returnedBlog : b))
-      .sort((a, b) => b.likes - a.likes)
-    setBlogs(updatedBlogsArray)
-  }
-
-  const removeBlog = async ({ id }) => {
-    try {
-      await blogService.remove(id)
-      setBlogs(blogs.filter((b) => b.id !== id))
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -149,9 +130,9 @@ const App = () => {
         <Blog
           key={blog.id}
           blog={blog}
-          handleLike={likeBlog}
+          handleLike={() => dispatch(likeBlog(blog))}
           user={user}
-          handleRemove={removeBlog}
+          handleRemove={() => dispatch(removeBlog(blog.id))}
         />
       ))}
       <Togglable buttonLabel="create blog" ref={blogFormRef}>
