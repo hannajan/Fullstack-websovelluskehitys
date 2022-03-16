@@ -1,5 +1,6 @@
 import blogsService from '../services/blogs'
 
+
 const blogsReducer = (state = [], action) => {
   switch(action.type) {
   case 'SET_BLOGS':
@@ -54,6 +55,13 @@ export const initializeBlogs = () => {
     const blogs = await blogsService.getAll()
     blogs.sort((a, b) => b.likes - a.likes)
     dispatch(setBlogs(blogs))
+  }
+}
+
+export const addBlog = (blog) => {
+  return async dispatch => {
+    const returnedBlog = await blogsService.create(blog)
+    dispatch(appendBlogs(returnedBlog))
   }
 }
 

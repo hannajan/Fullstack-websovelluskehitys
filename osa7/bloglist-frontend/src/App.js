@@ -3,20 +3,19 @@ import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import blogService from './services/blogs'
-import loginService from './services/login'
 import { showNotification } from './reducers/notificationReducer'
-import { appendBlogs, initializeBlogs, likeBlog, removeBlog } from './reducers/blogsReducer'
+import { addBlog, initializeBlogs, likeBlog, removeBlog } from './reducers/blogsReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import { checkForLoggedInUser, loginUser, logout } from './reducers/userReducer'
 
 const App = () => {
   const dispatch = useDispatch()
   const notification = useSelector((state) => state.notification)
   const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
 
@@ -25,26 +24,14 @@ const App = () => {
   }, [dispatch])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-    }
-  }, [])
+    dispatch(checkForLoggedInUser())
+  }, [dispatch])
 
   const handleLogin = async (event) => {
     event.preventDefault()
 
     try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-
-      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
-
-      blogService.setToken(user.token)
-      setUser(user)
+      dispatch(loginUser(username, password))
       setUsername('')
       setPassword('')
       dispatch(showNotification('Logged in!', 5))
@@ -56,29 +43,20 @@ const App = () => {
 
   const handleLogout = async (event) => {
     event.preventDefault()
-    window.localStorage.clear()
-    setUser(null)
+    dispatch(logout())
     dispatch(showNotification('Logged out!', 5))
   }
 
-  const addBlog = async (newBlog) => {
+  const handleCreateBlog = async (newBlog) => {
     try {
       blogFormRef.current.toggleVisibility()
-      const returnedBlog = await blogService.create(newBlog)
-      dispatch(appendBlogs(returnedBlog))
-
-      dispatch(showNotification(
-        `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
-        5
-      ))
+      dispatch(addBlog(newBlog))
+      dispatch(showNotification(`a new blog ${newBlog.title} by ${newBlog.author} added`, 5))
     } catch (e) {
       if(e.message === 'Request failed with status code 401') {
         dispatch(showNotification('Unauthorized request. Try signing in again.', 5))
       } else {
-        dispatch(showNotification(
-          'Blog could not be added. Title, author and url are required!',
-          5
-        ))
+        dispatch(showNotification('Blog could not be added. Title, author and url are required!', 5))
       }
     }
   }
@@ -136,7 +114,7 @@ const App = () => {
         />
       ))}
       <Togglable buttonLabel="create blog" ref={blogFormRef}>
-        <BlogForm createBlog={addBlog} />
+        <BlogForm createBlog={handleCreateBlog} />
       </Togglable>
     </div>
   )
