@@ -6,13 +6,14 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { showNotification } from './reducers/notificationReducer'
+import { appendBlogs, initializeBlogs, setBlogs } from './reducers/blogsReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
   const dispatch = useDispatch()
-  const notification = useSelector((state) => state)
+  const notification = useSelector((state) => state.notification)
+  const blogs = useSelector(state => state.blogs)
 
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -20,10 +21,8 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService
-      .getAll()
-      .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
-  }, [])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
@@ -66,18 +65,21 @@ const App = () => {
     try {
       blogFormRef.current.toggleVisibility()
       const returnedBlog = await blogService.create(newBlog)
-      setBlogs(blogs.concat(returnedBlog))
+      dispatch(appendBlogs(returnedBlog))
 
       dispatch(showNotification(
         `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
         5
       ))
     } catch (e) {
-      console.log(e)
-      dispatch(showNotification(
-        'Blog could not be added. Title, author and url are required!',
-        5
-      ))
+      if(e.message === 'Request failed with status code 401') {
+        dispatch(showNotification('Unauthorized request. Try signing in again.', 5))
+      } else {
+        dispatch(showNotification(
+          'Blog could not be added. Title, author and url are required!',
+          5
+        ))
+      }
     }
   }
 
