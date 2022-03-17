@@ -6,7 +6,7 @@ import Login from './components/Login'
 import Logout from './components/Logout'
 import Home from './components/Home'
 import Notification from './components/Notification'
-import Users from './components/UsersList'
+import Users, { UserView } from './components/UsersList'
 
 import { initializeBlogs } from './reducers/blogsReducer'
 import { checkForLoggedInUser } from './reducers/userReducer'
@@ -24,13 +24,12 @@ const App = () => {
     dispatch(checkForLoggedInUser())
   }, [dispatch])
 
-
-
   return (
     <div>
       <Notification text={notification} />
       {user ? <Logout /> : null }
       <Routes>
+        <Route path='/users/:id' element={<UserView />} />
         <Route path='/users' element={<Users />} />
         <Route path="/" element={user ? <Home /> : <Login />} />
       </Routes>
