@@ -10,6 +10,7 @@ import Users, { UserView } from './components/UsersList'
 
 import { initializeBlogs } from './reducers/blogsReducer'
 import { checkForLoggedInUser } from './reducers/userReducer'
+import { BlogView } from './components/Blog'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -30,6 +31,7 @@ const App = () => {
       {user ? <Logout /> : null }
       <Routes>
         <Route path='/users/:id' element={<UserView />} />
+        <Route path='/blogs/:id' element={<BlogView />} />
         <Route path='/users' element={<Users />} />
         <Route path="/" element={user ? <Home /> : <Login />} />
       </Routes>

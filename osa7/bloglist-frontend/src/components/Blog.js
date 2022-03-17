@@ -1,8 +1,9 @@
-import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { Link, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { likeBlog } from '../reducers/blogsReducer'
 
-const Blog = ({ blog, handleLike, user, handleRemove }) => {
-  const [showFullView, setShowFullView] = useState(false)
+const Blog = ({ blog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -12,43 +13,9 @@ const Blog = ({ blog, handleLike, user, handleRemove }) => {
     marginBottom: 5,
   }
 
-  const hideFullView = { display: showFullView ? 'none' : '' }
-  const showFull = { display: showFullView ? '' : 'none' }
-
-  const toggleView = () => {
-    setShowFullView(!showFullView)
-  }
-
-  const removeBlog = () => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      handleRemove({ id: blog.id })
-    }
-  }
-
   return (
     <div style={blogStyle}>
-      <div style={hideFullView} className="blogView">
-        {blog.title} {blog.author}
-        <button onClick={toggleView}>view</button>
-      </div>
-      <div style={showFull} className="fullBlogView">
-        {blog.title} {blog.author} <></>
-        <button onClick={toggleView}>hide</button> <br />
-        {blog.url} <br />
-        likes <></> {blog.likes}{' '}
-        <button id="like-button" onClick={() => handleLike(blog)}>
-          like
-        </button>{' '}
-        <br />
-        {blog.user.name}
-        {blog.user.name === user.name ? (
-          <div>
-            <button onClick={removeBlog}>remove</button>
-          </div>
-        ) : (
-          <></>
-        )}
-      </div>
+      <Link to={`/blogs/${blog.id}`} >{blog.title} {blog.author}</Link>
     </div>
   )
 }
@@ -58,6 +25,26 @@ Blog.propTypes = {
   handleLike: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   handleRemove: PropTypes.func.isRequired,
+}
+
+export const BlogView = () => {
+  const dispatch = useDispatch()
+  const blogs = useSelector(state => state.blogs)
+  const id = useParams().id
+  const blog = blogs.find(blog => blog.id === id)
+
+  if(!blog) return null
+
+  return (
+    <div>
+      <h2>{blog.title} {blog.author}</h2>
+      <a href={`https://${blog.url}`} target='_blank' rel='noopener noreferrer'>{blog.url}</a>
+      <div>
+        {blog.likes} likes <button onClick={() => dispatch(likeBlog(blog))}>like</button>
+      </div>
+      <div>added by {blog.user.name}</div>
+    </div>
+  )
 }
 
 export default Blog
