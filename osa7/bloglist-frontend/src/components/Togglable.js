@@ -1,6 +1,7 @@
 /* eslint-disable no-trailing-spaces */
 import { useState, useImperativeHandle, forwardRef } from 'react'
 import PropTypes from 'prop-types'
+import { Button, Box } from '@mui/material'
 
 const Togglable = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
@@ -19,15 +20,15 @@ const Togglable = forwardRef((props, ref) => {
   })
 
   return (
-    <div>
+    <Box component='div' mb={2} border={visible ? 'solid' : ''} borderRadius={3} p={2}>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+        <Button variant='outlined' onClick={toggleVisibility}>{props.buttonLabel}</Button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <Button variant='outlined' size='small' onClick={toggleVisibility}>cancel</Button>
       </div>
-    </div>
+    </Box>
   )
 })
 

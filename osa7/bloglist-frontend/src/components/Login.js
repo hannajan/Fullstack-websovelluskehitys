@@ -1,7 +1,15 @@
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 import { loginUser } from '../reducers/userReducer'
-import { showNotification } from '../reducers/notificationReducer'
+
+import {
+  Container,
+  Typography,
+  FormControl,
+  InputLabel,
+  Input,
+  Button,
+} from '@mui/material'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -10,49 +18,43 @@ const Login = () => {
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
-          id="username"
-          type="text"
-          value={username}
-          name="Username"
+      <FormControl>
+        <InputLabel htmlFor="form-username">username</InputLabel>
+        <Input
+          id="form-username"
           onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          id="password"
+        ></Input>
+      </FormControl>
+      <FormControl>
+        <InputLabel htmlFor="form-password">password</InputLabel>
+        <Input
+          id="form-password"
           type="password"
-          value={password}
-          name="Password"
           onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
+        ></Input>
+      </FormControl>
+      <Button type="submit">login</Button>
     </form>
   )
 
   const handleLogin = async (event) => {
     event.preventDefault()
-
     try {
       dispatch(loginUser(username, password))
       setUsername('')
       setPassword('')
-      dispatch(showNotification('Logged in!', 5))
     } catch (e) {
       console.log(e)
-      dispatch(showNotification('Wrong username or password!', 5))
     }
   }
 
   return (
-    <div>
-      <h2>Login to application</h2>
+    <Container sx={{ m: 2 }}>
+      <Typography variant="h4" textAlign="left" sx={{ p: 2 }}>
+        Login to application
+      </Typography>
       {loginForm()}
-    </div>
+    </Container>
   )
 }
 

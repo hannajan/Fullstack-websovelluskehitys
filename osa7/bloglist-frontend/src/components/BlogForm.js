@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { Typography, Box, Button, FormControl, InputLabel, Input } from '@mui/material'
 
 const BlogForm = ({ createBlog }) => {
   const [title, setTitle] = useState('')
@@ -22,41 +23,39 @@ const BlogForm = ({ createBlog }) => {
   }
 
   return (
-    <div className="formDiv">
-      <h2>create new</h2>
+    <Box component='div' className="formDiv" m={2}>
+      <Typography variant='h6'>Create new</Typography>
       <form onSubmit={addBlog}>
-        <div>
-          title:
-          <input
-            id="title"
+        <FormControl>
+          <InputLabel htmlFor='title'>title</InputLabel>
+          <Input
+            id='title'
             value={title}
-            onChange={({ target }) => setTitle(target.value)}
-            placeholder="write title here"
-          />
-        </div>
-        <div>
-          author:
-          <input
-            id="author"
+            placeholder='write title here'
+            onChange={({ target }) => setTitle(target.value)}>
+          </Input>
+        </FormControl>
+        <FormControl>
+          <InputLabel htmlFor='author'>author</InputLabel>
+          <Input
+            id='author'
             value={author}
-            onChange={({ target }) => setAuthor(target.value)}
             placeholder="write author here"
-          />
-        </div>
-        <div>
-          url:
-          <input
-            id="url"
+            onChange={({ target }) => setAuthor(target.value)}></Input>
+        </FormControl>
+        <FormControl>
+          <InputLabel htmlFor='url'>url</InputLabel>
+          <Input
+            id='url'
             value={url}
-            onChange={({ target }) => setUrl(target.value)}
             placeholder="write url here"
-          />
-        </div>
-        <button id="submit-button" type="submit">
+            onChange={({ target }) => setUrl(target.value)}></Input>
+        </FormControl>
+        <Button id="submit-button" type="submit" variant='contained'>
           create
-        </button>
+        </Button>
       </form>
-    </div>
+    </Box>
   )
 }
 

@@ -1,21 +1,26 @@
 import Logout from './Logout'
 import { Link } from 'react-router-dom'
+import { AppBar, Toolbar, MenuItem, Typography } from '@mui/material'
 
 const Menu = (user) => {
-  const style = {
+  /*   const style = {
     backgroundColor: 'grey',
     padding: 10,
     marginBottom: 5
-  }
+  } */
 
-  const padding = {
-    padding: 5
-  }
   return (
-    <div style={style}>
-      <Link style={padding} to="/">blogs</Link>
-      <Link style={padding} to='/users'>users</Link> {user ? <Logout /> : null}
-    </div>
+    <AppBar position="static">
+      <Toolbar>
+        <MenuItem key="blogs" component={Link} to="/">
+          <Typography textAlign="center" fontSize={20}>Blogs</Typography>
+        </MenuItem>
+        <MenuItem key="users" component={Link} to="/users">
+          <Typography textAlign="center" fontSize={20}>Users</Typography>
+        </MenuItem>
+        {user ? <Logout /> : null }
+      </Toolbar>
+    </AppBar>
   )
 }
 

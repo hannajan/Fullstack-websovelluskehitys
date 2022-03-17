@@ -6,9 +6,15 @@ import Blog from './Blog'
 import Togglable from './Togglable'
 import BlogForm from './BlogForm'
 
-
 import { showNotification } from '../reducers/notificationReducer'
 import { addBlog, likeBlog, removeBlog } from '../reducers/blogsReducer'
+import {
+  TableContainer,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+} from '@mui/material'
 
 const Home = () => {
   const dispatch = useDispatch()
@@ -16,8 +22,6 @@ const Home = () => {
   const blogs = useSelector((state) => state.blogs)
 
   const blogFormRef = useRef()
-
-
 
   const handleCreateBlog = async (newBlog) => {
     try {
@@ -47,19 +51,27 @@ const Home = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleLike={() => dispatch(likeBlog(blog))}
-          user={user}
-          handleRemove={() => dispatch(removeBlog(blog.id))}
-        />
-      ))}
+      <Typography variant="h4" color="inherit" sx={{ mb: 2 }}>
+        Blogs
+      </Typography>
       <Togglable buttonLabel="create blog" ref={blogFormRef}>
         <BlogForm createBlog={handleCreateBlog} />
       </Togglable>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+            {blogs.map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                handleLike={() => dispatch(likeBlog(blog))}
+                user={user}
+                handleRemove={() => dispatch(removeBlog(blog.id))}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }
