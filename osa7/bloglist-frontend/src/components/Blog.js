@@ -1,7 +1,8 @@
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { likeBlog } from '../reducers/blogsReducer'
+import { likeBlog, addComment } from '../reducers/blogsReducer'
 
 const Blog = ({ blog }) => {
   const blogStyle = {
@@ -35,6 +36,15 @@ export const BlogView = () => {
   const id = useParams().id
   const blog = blogs.find((blog) => blog.id === id)
 
+  const [comment, setComment] = useState('')
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const id = blog.id
+    dispatch(addComment(id, comment))
+    setComment('')
+  }
+
   if (!blog) return null
 
   return (
@@ -51,6 +61,13 @@ export const BlogView = () => {
       </div>
       <div>added by {blog.user.name}</div>
       <h3>comments</h3>
+      <form onSubmit={handleSubmit}>
+        <input
+          value={comment}
+          onChange={({ target }) => setComment(target.value)}type='text'
+        />
+        <button type='submit'>add comment</button>
+      </form>
       <ul>
         {blog.comments.map((comment) => (
           <li key={comment}>{comment}</li>
