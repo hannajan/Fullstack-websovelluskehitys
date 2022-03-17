@@ -12,11 +12,12 @@ const Logout = () => {
     dispatch(showNotification('Logged out!', 5))
   }
 
+  if(!user) return null
+
   return (
-    <div>
-      <p>{user.name} logged in</p>
-      <button onClick={handleLogout}>logout</button>
-    </div>
+    <span>
+      {user.name} logged in <button onClick={handleLogout}>logout</button>
+    </span>
   )
 }
 
