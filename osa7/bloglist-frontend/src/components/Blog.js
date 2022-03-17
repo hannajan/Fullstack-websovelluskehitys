@@ -15,7 +15,9 @@ const Blog = ({ blog }) => {
 
   return (
     <div style={blogStyle}>
-      <Link to={`/blogs/${blog.id}`} >{blog.title} {blog.author}</Link>
+      <Link to={`/blogs/${blog.id}`}>
+        {blog.title} {blog.author}
+      </Link>
     </div>
   )
 }
@@ -29,20 +31,31 @@ Blog.propTypes = {
 
 export const BlogView = () => {
   const dispatch = useDispatch()
-  const blogs = useSelector(state => state.blogs)
+  const blogs = useSelector((state) => state.blogs)
   const id = useParams().id
-  const blog = blogs.find(blog => blog.id === id)
+  const blog = blogs.find((blog) => blog.id === id)
 
-  if(!blog) return null
+  if (!blog) return null
 
   return (
     <div>
-      <h2>{blog.title} {blog.author}</h2>
-      <a href={`https://${blog.url}`} target='_blank' rel='noopener noreferrer'>{blog.url}</a>
+      <h2>
+        {blog.title} {blog.author}
+      </h2>
+      <a href={`https://${blog.url}`} target="_blank" rel="noopener noreferrer">
+        {blog.url}
+      </a>
       <div>
-        {blog.likes} likes <button onClick={() => dispatch(likeBlog(blog))}>like</button>
+        {blog.likes} likes{' '}
+        <button onClick={() => dispatch(likeBlog(blog))}>like</button>
       </div>
       <div>added by {blog.user.name}</div>
+      <h3>comments</h3>
+      <ul>
+        {blog.comments.map((comment) => (
+          <li key={comment}>{comment}</li>
+        ))}
+      </ul>
     </div>
   )
 }

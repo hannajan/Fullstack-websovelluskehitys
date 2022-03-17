@@ -1,10 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbm5paGlpcmkiLCJpZCI6IjYxNTZmMzE1ZTM2OTc4MzExNjk3ZjJlZiIsImlhdCI6MTY0NjczMjc3MCwiZXhwIjoxNjQ2NzM2MzcwfQ.Iyr8Qybn3IPC7-Fku1HQ1J9AHCYeGuRNmE-_NpFxGbQ
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbm5paGlpcmkiLCJpZCI6IjYxNTZmMzE1ZTM2OTc4MzExNjk3ZjJlZiIsImlhdCI6MTY0NzUxNzQzMywiZXhwIjoxNjQ3NTIxMDMzfQ.aFz3URLWb3ke2-Ivxt1thN5xdR6iPir_4X2hxqvxabw
 
 {
-    "title": "Hello again",
-    "author": "Jag Eller",
-    "url": "www.jag.eller.jag",
-    "likes": 2
+    "title": "Blog with comments",
+    "author": "Someone I Know",
+    "url": "www.google.fi",
+    "comments": [ "nice job!", "interesting read :)" ],
+    "likes": 100
 }
