@@ -2,24 +2,29 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import './index.css'
-import { createStore, applyMiddleware, combineReducers } from 'redux'
-import thunk from 'redux-thunk'
+import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
+import { BrowserRouter as Router } from 'react-router-dom'
+
 import notificationReducer from './reducers/notificationReducer'
 import blogsReducer from './reducers/blogsReducer'
 import userReducer from './reducers/userReducer'
+import usersListReducer from './reducers/usersListReducer'
 
-const reducer = combineReducers({
-  blogs: blogsReducer,
-  notification: notificationReducer,
-  user: userReducer
+const store = configureStore({
+  reducer: {
+    blogs: blogsReducer,
+    notification: notificationReducer,
+    user: userReducer,
+    users: usersListReducer
+  }
 })
-
-const store = createStore(reducer, applyMiddleware(thunk))
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </Provider>,
   document.getElementById('root')
 )
