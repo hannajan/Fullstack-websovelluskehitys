@@ -5,7 +5,7 @@ import NewBook from './components/NewBook'
 
 
 const App = () => {
-  const [page, setPage] = useState('authors')
+  const [page, setPage] = useState('books')
 
   return (
     <div>

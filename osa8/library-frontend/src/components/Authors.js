@@ -1,4 +1,4 @@
-import { useState, Component } from 'react'
+import { useState } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
 import { ALL_AUTHORS, UPDATE_AUTHOR } from '../queries'
 import Select from 'react-select'
@@ -55,9 +55,10 @@ const Authors = (props) => {
       <h2>Set birthyear</h2>
       <form onSubmit={submit}>
       <div>
-        name <Select 
+        name <Select
+          defaultValue={authorNames[0]}
           options={authorNames} 
-          onChange={({ value }) => setName(value)}
+          onChange={({ target }) => setName(target.value)}
         />
       </div>
       
