@@ -3,17 +3,17 @@ import { useMutation, useQuery } from '@apollo/client'
 import { ALL_AUTHORS, UPDATE_AUTHOR } from '../queries'
 import Select from 'react-select'
 
-const Authors = (props) => {
-  const result = useQuery(ALL_AUTHORS, {
-    pollInterval: 2000
-  })
+const Authors = ({show, token}) => {
+  const result = useQuery(ALL_AUTHORS)
 
-  const [ updateAuthor ] = useMutation(UPDATE_AUTHOR)
+  const [ updateAuthor ] = useMutation(UPDATE_AUTHOR, {
+    refetchQueries: [ { query: ALL_AUTHORS }]
+  })
 
   const [name, setName] = useState('')
   const [birthyear, setBirthyear] = useState('')
 
-  if(!props.show) return null
+  if(!show) return null
 
   if(result.loading) return <div>loading...</div>
 
@@ -52,13 +52,14 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
+      { token ?
+      <div>
       <h2>Set birthyear</h2>
       <form onSubmit={submit}>
       <div>
         name <Select
-          defaultValue={authorNames[0]}
           options={authorNames} 
-          onChange={({ target }) => setName(target.value)}
+          onChange={({ value }) => setName(value)}
         />
       </div>
       
@@ -68,6 +69,8 @@ const Authors = (props) => {
       </div>
       <button type='submit'>update author</button>
       </form>
+      </div>
+      : null }
     </div>
   )
 }

@@ -57,7 +57,7 @@ const typeDefs = gql`
       author: String!
       published: Int!
       genres: [String!]!
-      ): Book!
+      ): Book
     editAuthor(
       name: String!
       setBornTo: Int!
@@ -97,7 +97,7 @@ const resolvers = {
       await authors.forEach(a => {
         const booksByAuthor = books.filter(b => b.author.toString() === a._id.toString())
         const bookCount = booksByAuthor.length
-        allAuthors = allAuthors.concat({ id: a._id.toString() , name: a.name, bookCount })
+        allAuthors = allAuthors.concat({ id: a._id.toString() , name: a.name, born: a.born, bookCount })
       })
       return allAuthors
     },
@@ -120,11 +120,10 @@ const resolvers = {
       let author
       if(!authorNames.includes(args.author)) {
         author = new Author({ name: args.author })
-        author.save()
+        await author.save()
       } else {
         author = await Author.findOne({ name: args.author })
       }
-
       const book = new Book({ ...args, author })
 
       try {
@@ -146,7 +145,7 @@ const resolvers = {
       if(!args.name) {
         throw new UserInputError('Author name required')
       }
-      let author = await Author.findOne({ name: args.name })
+      const author = await Author.findOne({ name: args.name })
       
       if(!author) return null
 
@@ -194,7 +193,7 @@ const server = new ApolloServer({
   resolvers,
   context: async ({ req }) => {
     const auth = req ? req.headers.authorization : null
-    if(auth && auth.toLocaleLowerCase().startsWith('bearer ')) {
+    if(auth && auth.toLowerCase().startsWith('bearer ')) {
       const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
       const currentUser = await User.findById(decodedToken.id)
       return { currentUser }
