@@ -6,7 +6,7 @@ import LoginForm from './components/LoginForm'
 import { useApolloClient } from '@apollo/client'
 
 const App = () => {
-  const [page, setPage] = useState('authors')
+  const [page, setPage] = useState('books')
   const [token, setToken] = useState(null)
   const client = useApolloClient()
 
