@@ -1,32 +1,32 @@
-import { useState } from "react";
-import { useMutation } from "@apollo/client";
-import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK, ALL_GENRES } from "../queries";
+import { useState } from 'react'
+import { useMutation } from '@apollo/client'
+import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK, ALL_GENRES } from '../queries'
 
 const NewBook = (props) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [published, setPublished] = useState("");
-  const [genre, setGenre] = useState("");
-  const [genres, setGenres] = useState([]);
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [published, setPublished] = useState('')
+  const [genre, setGenre] = useState('')
+  const [genres, setGenres] = useState([])
 
   const [createBook] = useMutation(CREATE_BOOK, {
     refetchQueries: [
       { query: ALL_AUTHORS },
       { query: ALL_GENRES },
-      { query: ALL_BOOKS,  variables: { genre: null } },
+      { query: ALL_BOOKS, variables: { genre: null } },
     ],
     onError: (error) => {
-      console.log("createBook ", error);
+      console.log('createBook ', error)
     },
-  });
+  })
 
   if (!props.show || !props.token) {
-    return null;
+    return null
   }
 
   const submit = async (event) => {
-    event.preventDefault();
-    
+    event.preventDefault()
+
     createBook({
       variables: {
         title,
@@ -34,20 +34,20 @@ const NewBook = (props) => {
         published: Number(published),
         genres,
       },
-    });
+    })
 
-    setTitle("");
-    setPublished("");
-    setAuthor("");
-    setGenres([]);
-    setGenre("");
-    props.setPage("books");
-  };
+    setTitle('')
+    setPublished('')
+    setAuthor('')
+    setGenres([])
+    setGenre('')
+    props.setPage('books')
+  }
 
   const addGenre = () => {
-    setGenres(genres.concat(genre));
-    setGenre("");
-  };
+    setGenres(genres.concat(genre))
+    setGenre('')
+  }
 
   return (
     <div>
@@ -83,11 +83,11 @@ const NewBook = (props) => {
             add genre
           </button>
         </div>
-        <div>genres: {genres.join(" ")}</div>
+        <div>genres: {genres.join(' ')}</div>
         <button type="submit">create book</button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default NewBook;
+export default NewBook
