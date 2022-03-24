@@ -2,10 +2,10 @@ import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
 
 const BooksInGenre = ({ genre }) => {
-  const result = useQuery(ALL_BOOKS, {
-    variables: { genre }
-  })
-
+    const result = useQuery(ALL_BOOKS, {
+      variables: { genre }
+    })
+  
   if(result.loading) return <div>loading...</div>
   const books = result.data.allBooks
 
