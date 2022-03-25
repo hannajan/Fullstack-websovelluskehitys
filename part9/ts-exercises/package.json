@@ -1,0 +1,16 @@
+{
+  "name": "ts-exercises",
+  "version": "1.0.0",
+  "description": "Typescript execises for part 9",
+  "main": "index.js",
+  "scripts": {
+    "calculateBmi": "ts-node -- bmiCalculator.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hanna Jantunen",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  }
+}
