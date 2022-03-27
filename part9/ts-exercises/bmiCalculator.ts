@@ -13,4 +13,4 @@ const calculateBmi = (height: number, weight: number): string => {
   throw new Error('Give height and weight as arguments!');
 };
 
-export default calculateBmi
+export default calculateBmi;
