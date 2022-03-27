@@ -53,7 +53,7 @@ function giveRating(average: number, target: number): Rating {
   return { rating, ratingDescription };
 }
 
-const calculateExercises = (
+export const calculateExercises = (
   hoursPerDay: Array<number>,
   target: number
 ): Result => {
