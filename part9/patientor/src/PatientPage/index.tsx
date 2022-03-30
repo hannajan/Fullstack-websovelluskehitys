@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useStateValue, updatePatient } from "../state";
-import { Patient } from "../types";
+import { Patient  } from "../types";
 import { apiBaseUrl } from "../constants";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
@@ -28,6 +28,8 @@ const PatientPage = () => {
   const patient = Object.values(patients).find(
     (patient: Patient) => patient.id === id
   );
+  const entries = patient?.entries;
+
 
   React.useEffect(() => {
     const fetchPatient = async () => {
@@ -53,6 +55,15 @@ const PatientPage = () => {
       </h2>
       {patient.ssn ? <p>ssn: {patient.ssn}</p> : null}
       <p>occupation: {patient.occupation}</p>
+      <h3>entries</h3>
+      {entries?.map(entry => 
+      <div key={entry.id}>
+          <p>{entry.date} <em>{entry.description}</em></p>
+          <ul>
+            {entry.diagnosisCodes?.map(code => <li key={code}>{code}</li>)}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

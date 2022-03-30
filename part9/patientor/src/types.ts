@@ -17,5 +17,26 @@ export interface Patient {
   gender: Gender;
   ssn?: string;
   dateOfBirth?: string;
-  entries: string[];
+  entries: Entry[];
+}
+
+interface Discharge {
+  date: string;
+  criteria: string;
+}
+
+interface SickLeave {
+  startDate: string;
+  endDate: string;
+}
+
+export interface Entry {
+  id: string;
+  date: string;
+  type: string;
+  specialist: string;
+  diagnosisCodes?: string[];
+  description: string[];
+  discharge?: Discharge;
+  sickLeave?: SickLeave;
 }
