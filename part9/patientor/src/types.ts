@@ -40,3 +40,9 @@ export interface Entry {
   discharge?: Discharge;
   sickLeave?: SickLeave;
 }
+
+export type Diagnose = {
+  code: string;
+  name: string;
+  latin?: string;
+};

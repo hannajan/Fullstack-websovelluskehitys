@@ -22,7 +22,7 @@ const GenderIcon: React.FC<{ gender: string }> = ({ gender }) => {
 };
 
 const PatientPage = () => {
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnosis }, dispatch] = useStateValue();
 
   const { id } = useParams<{ id: string }>();
   const patient = Object.values(patients).find(
@@ -60,7 +60,7 @@ const PatientPage = () => {
       <div key={entry.id}>
           <p>{entry.date} <em>{entry.description}</em></p>
           <ul>
-            {entry.diagnosisCodes?.map(code => <li key={code}>{code}</li>)}
+            {entry.diagnosisCodes?.map(code => <li key={code}>{code} {diagnosis[code]}</li>)}
           </ul>
         </div>
       )}
