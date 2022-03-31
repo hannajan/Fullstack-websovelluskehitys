@@ -17,13 +17,13 @@ const PatientListPage = () => {
   const [{ patients }, dispatch] = useStateValue();
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string>();
+  const [error, setError] = React.useState<string>('');
 
   const openModal = (): void => setModalOpen(true);
 
   const closeModal = (): void => {
     setModalOpen(false);
-    setError(undefined);
+    setError('');
   };
 
   const submitNewPatient = async (values: PatientFormValues) => {

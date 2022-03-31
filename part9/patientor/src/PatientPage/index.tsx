@@ -4,9 +4,11 @@ import { useParams } from "react-router-dom";
 import { useStateValue, updatePatient } from "../state";
 import { Patient  } from "../types";
 import { apiBaseUrl } from "../constants";
+
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import TransgenderIcon from "@mui/icons-material/Transgender";
+import EntryDetails from "./EntryDetails";
 
 const GenderIcon: React.FC<{ gender: string }> = ({ gender }) => {
   switch (gender) {
@@ -22,7 +24,7 @@ const GenderIcon: React.FC<{ gender: string }> = ({ gender }) => {
 };
 
 const PatientPage = () => {
-  const [{ patients, diagnosis }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
 
   const { id } = useParams<{ id: string }>();
   const patient = Object.values(patients).find(
@@ -57,15 +59,14 @@ const PatientPage = () => {
       <p>occupation: {patient.occupation}</p>
       <h3>entries</h3>
       {entries?.map(entry => 
-      <div key={entry.id}>
-          <p>{entry.date} <em>{entry.description}</em></p>
-          <ul>
-            {entry.diagnosisCodes?.map(code => <li key={code}>{code} {diagnosis[code]}</li>)}
-          </ul>
+        <div key={entry.id}>
+          <EntryDetails entry={entry} />
         </div>
-      )}
-    </div>
+      )    
+      }
+      </div>
   );
 };
+
 
 export default PatientPage;

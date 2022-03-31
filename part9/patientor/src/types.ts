@@ -30,15 +30,20 @@ interface SickLeave {
   endDate: string;
 }
 
+type Type = "Hospital" | "OccupationalHealthcare" | "HealthCheck";
+type HealthCheckRating = 0 | 1 | 2 | 3;
+ 
 export interface Entry {
   id: string;
   date: string;
-  type: string;
+  type: Type;
   specialist: string;
   diagnosisCodes?: string[];
   description: string[];
   discharge?: Discharge;
   sickLeave?: SickLeave;
+  employerName?: string;
+  healthCheckRating?: HealthCheckRating;
 }
 
 export type Diagnose = {
