@@ -30,16 +30,15 @@ interface SickLeave {
   endDate: string;
 }
 
-type Type = "Hospital" | "OccupationalHealthcare" | "HealthCheck";
 type HealthCheckRating = 0 | 1 | 2 | 3;
  
 export interface Entry {
   id: string;
   date: string;
-  type: Type;
+  type: EntryType;
   specialist: string;
   diagnosisCodes?: string[];
-  description: string[];
+  description: string;
   discharge?: Discharge;
   sickLeave?: SickLeave;
   employerName?: string;
@@ -50,4 +49,20 @@ export type Diagnose = {
   code: string;
   name: string;
   latin?: string;
+};
+
+export enum EntryType {
+  Hospital = "Hospital",
+  Occupational = "OccupationalHealthcare",
+  HealthCheck = "HealthCheck"
+}
+
+export type EntryTypeOption = {
+  value: EntryType;
+  label: string;
+};
+
+export type HealthRatingOption = {
+  value: number;
+  label: string;
 };
