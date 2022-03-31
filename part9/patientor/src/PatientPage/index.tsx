@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useStateValue, updatePatient, addEntry } from "../state";
+import { useStateValue, updatePatient, addEntry } from "../state"; 
 import { Patient, Entry } from "../types";
 import { apiBaseUrl } from "../constants";
 
@@ -37,36 +37,14 @@ export type EntryFormValues = Pick<
 
 const PatientPage = () => {
   const [{ patients }, dispatch] = useStateValue();
+  const [error, setError] = React.useState<string>();
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-
-  const openModal = (): void => setModalOpen(true);
-  const closeModal = (): void => setModalOpen(false);
-
   const { id } = useParams<{ id: string }>();
   const patient = Object.values(patients).find(
     (patient: Patient) => patient.id === id
   );
   const entries = patient?.entries;
 
-  const submitNewEntry = async (values: EntryFormValues) => {
-    console.log("values going to server in submitNewEntry", values);
-    try {
-      if (id) {
-        const { data: newEntry } = await axios.post<Entry>(
-          `${apiBaseUrl}/patients/${id}/entries`,
-          values
-        );
-        dispatch(addEntry(newEntry, id));
-        closeModal();
-      }
-    } catch (e: unknown) {
-      if (axios.isAxiosError(e)) {
-        console.error(e?.response?.data || "Unrecognized axios error");
-      } else {
-        console.error("Unknown error", e);
-      }
-    }
-  };
 
   React.useEffect(() => {
     const fetchPatient = async () => {
@@ -81,6 +59,35 @@ const PatientPage = () => {
       void fetchPatient();
     }
   }, [dispatch, patient]);
+
+  const openModal = (): void => setModalOpen(true);
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewEntry = async (values: EntryFormValues) => {
+    try {
+      if (id) {
+        const { data: newEntry } = await axios.post<Entry>(  
+          `${apiBaseUrl}/patients/${id}/entries`,
+          values
+        );
+        dispatch(addEntry(newEntry, id));
+      }
+        closeModal(); 
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        console.error(e?.response?.data || "Unrecognized axios error");
+        setError(
+          String(e?.response?.data?.error) || "Unrecognized axios error"
+        );
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+  };
 
   if (!patient) return <div>loading...</div>;
 
@@ -102,6 +109,7 @@ const PatientPage = () => {
         modalOpen={modalOpen}
         onSubmit={submitNewEntry}
         onClose={closeModal}
+        error={error}
       />
       <Button variant="contained" onClick={openModal}>
         Add new entry
