@@ -79,6 +79,14 @@ const PatientPage = () => {
             criteria: values.dischargeCriteria
           }
         };
+      case "OccupationalHealthcare":
+        return {
+          ...selectedValues,
+          sickLeave: {
+            startDate: values.sickLeaveStartDate,
+            endDate: values.sickLeaveEndDate
+          }
+        };
       default:
         return selectedValues;
     }

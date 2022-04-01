@@ -5,11 +5,13 @@ import { Grid, Button, FormControl, Typography } from "@material-ui/core";
 import Box from "@mui/material/Box";
 import { useStateValue } from "../state";
 
-export type EntryFormValues = Pick<Entry, "type" | "date" | "specialist" | "description" | "diagnosisCodes" | "healthCheckRating" | "discharge" >;
+export type EntryFormValues = Pick<Entry, "type" | "date" | "specialist" | "description" | "diagnosisCodes" | "healthCheckRating" | "discharge" | "employerName" | "sickLeave" >;
 
 export interface EntryFormValuesDivided extends EntryFormValues {
   dischargeDate?: string;
   dischargeCriteria?: string;
+  sickLeaveStartDate?: string;
+  sickLeaveEndDate?: string;
 }
 
 interface Props {
@@ -19,7 +21,8 @@ interface Props {
 
 const entryTypeOptions: EntryTypeOption[] = [
   { value: EntryType.HealthCheck, label: "HealthCheck" },
-  { value: EntryType.Hospital, label: "Hospital"}
+  { value: EntryType.Hospital, label: "Hospital"},
+  { value: EntryType.Occupational, label: "OccupationalHealthcare"}
 ];
 
 const healthRatingOptions: HealthRatingOption[] = [
@@ -47,7 +50,10 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         specialist:"",
         healthCheckRating: 0,
         dischargeDate: "",
-        dischargeCriteria: ""
+        dischargeCriteria: "",
+        employerName: "",
+        sickLeaveEndDate: "",
+        sickLeaveStartDate: ""
         }}
       onSubmit={onSubmit}
       validate={(values) => {
@@ -93,7 +99,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               <FormControl style={{ width: 552, marginBottom: '30px' }}>
                 <Box component="span" sx={{ p: 2, border: '1px solid grey', boxShadow: 3, borderRadius: 2 }}>
                   <Typography>Discharge</Typography>
-                  <Box component="span" sx={{ float: 'left', width: 120 }}> 
+                  <Box component="span" sx={{ float: 'left', width: 140 }}> 
                     <Field
                       label="Date"
                       placeholder="YYYY-MM-DD"
@@ -101,7 +107,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                       component={TextField}
                     />
                   </Box>
-                  <Box component="span" sx={{ float: 'right', width: 360 }}>
+                  <Box component="span" sx={{ float: 'right', width: 140 }}>
                     <Field
                       label="Criteria"
                       placeholder="Criteria"
@@ -109,6 +115,34 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                       component={TextField}
                     />
                   </Box>
+                  </Box>
+              </FormControl>
+            }
+            { values.type === "OccupationalHealthcare" &&
+              <FormControl style={{ width: 552, marginBottom: '30px' }}>
+                <Box component="span" sx={{ p: 2, border: '1px solid grey', boxShadow: 3, borderRadius: 2 }}>
+                  <Typography>Sick Leave</Typography>
+                      <Box component="div" sx={{ float: 'left', width: 150 }}> 
+                        <Field
+                          label="Start Date"
+                          placeholder="YYYY-MM-DD"
+                          name="sickLeaveStartDate"
+                          component={TextField}
+                        />
+                      </Box>
+                      <Box sx={{ float: 'left', m: 2}}>
+                      <Typography component="div">
+                        <Box sx={{ float: 'center', width: 20 }}> - </Box>
+                      </Typography>
+                      </Box>
+                      <Box component="div" sx={{ float: 'left', width: 150 }}>
+                        <Field
+                          label="End Date"
+                          placeholder="YYYY-MM-DD"
+                          name="sickLeaveEndDate"
+                          component={TextField}
+                        />
+                      </Box>
                   </Box>
               </FormControl>
             }

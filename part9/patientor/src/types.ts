@@ -26,8 +26,8 @@ interface Discharge {
 }
 
 interface SickLeave {
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 type HealthCheckRating = 0 | 1 | 2 | 3;
