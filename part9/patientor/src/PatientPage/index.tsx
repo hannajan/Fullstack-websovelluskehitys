@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useStateValue, updatePatient, addEntry } from "../state"; 
 import { Patient, Entry } from "../types";
 import { apiBaseUrl } from "../constants";
-
+import { EntryFormValues, EntryFormValuesDivided } from "../AddEntryModal/AddEntryForm";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -24,16 +24,6 @@ const GenderIcon: React.FC<{ gender: string }> = ({ gender }) => {
       return null;
   }
 };
-
-export type EntryFormValues = Pick<
-  Entry,
-  | "type"
-  | "date"
-  | "specialist"
-  | "description"
-  | "diagnosisCodes"
-  | "healthCheckRating"
->;
 
 const PatientPage = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -66,12 +56,42 @@ const PatientPage = () => {
     setError(undefined);
   };
 
-  const submitNewEntry = async (values: EntryFormValues) => {
+  const parseValues = (values: EntryFormValuesDivided): EntryFormValues => {
+    const selectedValues: EntryFormValues = {
+      type: values.type,
+      date: values.date,
+      description: values.description,
+      specialist: values.specialist,
+      diagnosisCodes: values.diagnosisCodes ? values.diagnosisCodes : undefined
+    };
+
+    switch (values.type) {
+      case "HealthCheck":
+        return {
+          ...selectedValues,
+          healthCheckRating: values.healthCheckRating
+        };
+      case "Hospital":
+        return {
+          ...selectedValues,
+          discharge: {
+            date: values.dischargeDate,
+            criteria: values.dischargeCriteria
+          }
+        };
+      default:
+        return selectedValues;
+    }
+  };
+
+  const submitNewEntry = async (values: EntryFormValuesDivided) => {
+    
+    const selectedValues = parseValues(values);
     try {
       if (id) {
         const { data: newEntry } = await axios.post<Entry>(  
           `${apiBaseUrl}/patients/${id}/entries`,
-          values
+          selectedValues
         );
         dispatch(addEntry(newEntry, id));
       }

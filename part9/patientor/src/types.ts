@@ -21,8 +21,8 @@ export interface Patient {
 }
 
 interface Discharge {
-  date: string;
-  criteria: string;
+  date?: string;
+  criteria?: string;
 }
 
 interface SickLeave {

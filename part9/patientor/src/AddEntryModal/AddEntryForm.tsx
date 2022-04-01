@@ -1,18 +1,25 @@
 import { Formik, Form, Field } from "formik";
 import { Diagnosis, Entry, EntryType, EntryTypeOption, HealthRatingOption } from "../types";
 import { TextField, SelectField, DiagnosisSelection } from "../AddPatientModal/FormField";
-import { Grid, Button } from "@material-ui/core";
+import { Grid, Button, FormControl, Typography } from "@material-ui/core";
+import Box from "@mui/material/Box";
 import { useStateValue } from "../state";
 
-export type EntryFormValues = Pick<Entry, "type" | "date" | "specialist" | "description" | "diagnosisCodes" | "healthCheckRating" >;
+export type EntryFormValues = Pick<Entry, "type" | "date" | "specialist" | "description" | "diagnosisCodes" | "healthCheckRating" | "discharge" >;
+
+export interface EntryFormValuesDivided extends EntryFormValues {
+  dischargeDate?: string;
+  dischargeCriteria?: string;
+}
 
 interface Props {
-  onSubmit: (values: EntryFormValues) => void;
+  onSubmit: (values: EntryFormValuesDivided) => void;
   onCancel: () => void;
 }
 
 const entryTypeOptions: EntryTypeOption[] = [
-  { value: EntryType.HealthCheck, label: "HealthCheck" }
+  { value: EntryType.HealthCheck, label: "HealthCheck" },
+  { value: EntryType.Hospital, label: "Hospital"}
 ];
 
 const healthRatingOptions: HealthRatingOption[] = [
@@ -39,7 +46,9 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         description: "",
         specialist:"",
         healthCheckRating: 0,
-      }}
+        dischargeDate: "",
+        dischargeCriteria: ""
+        }}
       onSubmit={onSubmit}
       validate={(values) => {
         const requiredError = "Field is required";
@@ -56,7 +65,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         return errors;
       }}
       >
-      {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
+      {({ isValid, dirty, setFieldValue, setFieldTouched, values }) => {
         return (
           <Form className="form ui">
             <SelectField name="type" label="Type" options={entryTypeOptions} />
@@ -72,12 +81,37 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               name="date"
               component={TextField}
             /> 
-            <SelectField name="healthCheckRating" label="Health Rating" options={healthRatingOptions} />
+            { values.type === "HealthCheck" &&
+              <SelectField name="healthCheckRating" label="Health Rating" options={healthRatingOptions} />
+            }
             <DiagnosisSelection
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
               diagnoses={diagnoseList}
             />
+            { values.type === "Hospital" &&
+              <FormControl style={{ width: 552, marginBottom: '30px' }}>
+                <Box component="span" sx={{ p: 2, border: '1px solid grey', boxShadow: 3, borderRadius: 2 }}>
+                  <Typography>Discharge</Typography>
+                  <Box component="span" sx={{ float: 'left', width: 120 }}> 
+                    <Field
+                      label="Date"
+                      placeholder="YYYY-MM-DD"
+                      name="dischargeDate"
+                      component={TextField}
+                    />
+                  </Box>
+                  <Box component="span" sx={{ float: 'right', width: 360 }}>
+                    <Field
+                      label="Criteria"
+                      placeholder="Criteria"
+                      name="dischargeCriteria"
+                      component={TextField}
+                    />
+                  </Box>
+                  </Box>
+              </FormControl>
+            }
             <Field
               label="Specialist"
               placeholder="Specialist"

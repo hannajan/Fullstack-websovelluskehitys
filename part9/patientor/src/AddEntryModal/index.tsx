@@ -1,13 +1,13 @@
 import React from "react";
 import { Dialog, DialogTitle, DialogContent, Divider } from "@material-ui/core";
 import AddEntryForm from "../AddEntryModal/AddEntryForm";
-import { EntryFormValues } from "../AddEntryModal/AddEntryForm";
+import { EntryFormValuesDivided } from "../AddEntryModal/AddEntryForm";
 import { Alert } from "@material-ui/lab";
 
 interface Props {
   modalOpen: boolean;
   onClose: () => void;
-  onSubmit: (values: EntryFormValues) => void;
+  onSubmit: (values: EntryFormValuesDivided) => void;
   error?: string;
 }
 
